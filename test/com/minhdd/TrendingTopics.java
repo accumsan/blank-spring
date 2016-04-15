@@ -30,7 +30,7 @@ public class TrendingTopics {
             topicsCount = update(previousTopicCount, topics.get(i - 1), topics.get(i - 1 + WINDOW));
         }
         return topicsCount.keySet().stream()
-                .filter(key -> topicsCount.get(key) >= 40)
+                .filter(key -> topicsCount.get(key) >= THRESHOLD)
                 .findFirst().orElse(trending(topics, i + 1, topicsCount));
     }
 
@@ -46,14 +46,14 @@ public class TrendingTopics {
     }
 
     @Test
-    public void should_not_found_when_count_inferior_than_40_trending() throws IOException {
-        List<String> trendingStream39 = Files.lines(Paths.get("data/input1.txt")).skip(1).limit(39).collect(toList());
+    public void should_not_found_when_count_inferior_than_threshold_trending() throws IOException {
+        List<String> trendingStream39 = Files.lines(Paths.get("data/input1.txt")).skip(1).limit(THRESHOLD-1).collect(toList());
         assertEquals("NOT_FOUND", trending(trendingStream39, 0, null));
     }
 
     @Test
-    public void when_count_between_40_and_60() throws IOException {
-        List<String> trendingStream60 = Files.lines(Paths.get("data/input1.txt")).skip(1).limit(60).collect(toList());
+    public void when_count_between_threshold_and_window() throws IOException {
+        List<String> trendingStream60 = Files.lines(Paths.get("data/input1.txt")).skip(1).limit(WINDOW).collect(toList());
         assertEquals("NOT_FOUND", trending(trendingStream60, 0, null));
     }
 
